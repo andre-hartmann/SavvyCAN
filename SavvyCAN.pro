@@ -34,7 +34,7 @@ SOURCES += main.cpp\
     can_structs.cpp \
     motorcontrollerconfigwindow.cpp \
     connections/canconnection.cpp \
-    connections/socketcan.cpp \
+    connections/serialbusconnection.cpp \
     connections/canconfactory.cpp \
     connections/gvretserial.cpp \
     connections/canconmanager.cpp \
@@ -85,7 +85,7 @@ HEADERS  += mainwindow.h \
     utils/lfqueue.h \
     motorcontrollerconfigwindow.h \
     connections/canconnection.h \
-    connections/socketcan.h \
+    connections/serialbusconnection.h \
     connections/canconconst.h \
     connections/canconfactory.h \
     connections/gvretserial.h \
