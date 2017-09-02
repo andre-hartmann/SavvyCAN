@@ -11,8 +11,8 @@
 /****    class definition       ****/
 /***********************************/
 
-SerialBusConnection::SerialBusConnection(QString portName) :
-    CANConnection(portName, CANCon::SOCKETCAN, 1, 4000, true),
+SerialBusConnection::SerialBusConnection(const QString &pluginName, const QString &portName) :
+    CANConnection(pluginName, portName, 1, 4000, true),
     mDev_p(NULL),
     mTimer(this) /*NB: set connection as parent of timer to manage it from working thread */
 {
@@ -75,7 +75,7 @@ void SerialBusConnection::piSetBusSettings(int pBusIdx, CANBus bus)
         return;
 
     /* create device */
-    mDev_p = QCanBus::instance()->createDevice("socketcan", getPort());
+    mDev_p = QCanBus::instance()->createDevice(getType(), getPort());
     if (!mDev_p) {
         disconnectDevice();
         qDebug() << "can't create device";
@@ -210,7 +210,7 @@ void SerialBusConnection::framesReceived()
 
 
 void SerialBusConnection::testConnection() {
-    QCanBusDevice*  dev_p = QCanBus::instance()->createDevice("socketcan", getPort());
+    QCanBusDevice *dev_p = QCanBus::instance()->createDevice(getType(), getPort());
 
     switch(getStatus())
     {

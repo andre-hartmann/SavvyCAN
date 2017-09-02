@@ -28,7 +28,6 @@ public:
     explicit ConnectionWindow(QWidget *parent = 0);
     ~ConnectionWindow();
 
-    CANCon::type getConnectionType();
     bool getSWMode();
 
 signals:
@@ -46,7 +45,7 @@ public slots:
 
 private slots:
     void handleOKButton();
-    void handleConnTypeChanged();
+    void handleConnectionTypeChanged(const QString &type);
     void currentRowChanged(const QModelIndex &current, const QModelIndex &previous);
     void consoleEnableChanged(bool checked);
     void handleRemoveConn();
@@ -67,14 +66,12 @@ private:
 
     void selectSerial();
     void selectKvaser();
-    void selectSocketCan();
-    bool isSocketCanAvailable();
+    void selectSerialBus();
     int getSpeed();
-    QString getPortName();
-    void setPortName(CANCon::type pType, QString pPortName);
+    void setPortName(const QString &typeName, const QString &portName);
 
     void setActiveAll(bool pActive);
-    CANConnection* create(CANCon::type pTye, QString pPortName);
+    CANConnection *create(const QString &typeName, const QString &portName);
     void loadConnections();
     void saveConnections();
     void showEvent(QShowEvent *);

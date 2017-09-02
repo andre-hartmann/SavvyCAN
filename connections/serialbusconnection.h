@@ -12,7 +12,7 @@ class SerialBusConnection : public CANConnection
     Q_OBJECT
 
 public:
-    SerialBusConnection(QString portName);
+    SerialBusConnection(const QString &pluginName, const QString &portName);
     virtual ~SerialBusConnection();
 
 protected:

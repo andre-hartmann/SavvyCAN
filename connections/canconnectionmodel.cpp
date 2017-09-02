@@ -100,13 +100,7 @@ QVariant CANConnectionModel::data(const QModelIndex &index, int role) const
                 return QString::number(index.row());
                 break;
             case 1: //type
-                if (conn_p)
-                    switch (conn_p->getType()) {
-                        case CANCon::KVASER: return "KVASER";
-                        case CANCon::SOCKETCAN: return "SocketCAN";
-                        case CANCon::GVRET_SERIAL: return "GVRET";
-                        default: {}
-                    }
+                if (conn_p) return conn_p->getType();
                 else qDebug() << "Tried to show connection type but connection was NULL";
                 break;
             case 2: //port

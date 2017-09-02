@@ -18,14 +18,14 @@ protected:
 
     /**
      * @brief CANConnection constructor
+     * @param pType: string describing the type of connection
      * @param pPort: string containing port name
-     * @param pType: the type of connection @ref CANCon::type
      * @param pNumBuses: the number of buses the device has
      * @param pQueueLen: the length of the lock free queue to use
      * @param pUseThread: if set to true, object will be execute in a dedicated thread
      */
-    CANConnection(QString pPort,
-                  CANCon::type pType,
+    CANConnection(const QString &pType,
+                  const QString &pPort,
                   int pNumBuses,
                   int pQueueLen,
                   bool pUseThread);
@@ -60,7 +60,7 @@ public:
      * @brief getType
      * @return the @ref CANCon::type of the device
      */
-    CANCon::type getType();
+    QString getType() const;
 
     /**
      * @brief getStatus
@@ -68,6 +68,8 @@ public:
      */
     CANCon::status getStatus();
 
+    static QString typeGvret();
+    static QString typeKvaser();
 
 signals:
     /*not implemented yet */
@@ -293,7 +295,7 @@ protected:
 private:
     LFQueue<CANFrame>   mQueue;
     const QString       mPort;
-    const CANCon::type  mType;
+    const QString       mType;
     bool                mIsCapSuspended;
     QAtomicInt          mStatus;
     bool                mStarted;

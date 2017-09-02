@@ -7,7 +7,7 @@
 class CanConFactory
 {
 public:
-    static CANConnection* create(CANCon::type, QString pPortName);
+    static CANConnection *create(const QString &type, const QString &portName);
 };
 
 #endif // CANCONFACTORY_H
