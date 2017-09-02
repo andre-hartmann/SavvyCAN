@@ -18,10 +18,6 @@ void ScriptContainer::compileScript()
 
     emit sendLog("Compiling script...");
 
-    canHelper->clearFilters();
-    isoHelper->clearFilters();
-    udsHelper->clearFilters();
-
     if (result.isError())
     {
 
@@ -199,7 +195,7 @@ void CANScriptHelper::sendFrame(QJSValue bus, QJSValue id, QJSValue length, QJSV
 {
     CANFrame frame;
     frame.extended = false;
-    frame.ID = id.toInt();
+    frame.ID = id.toUInt();
     frame.len = length.toUInt();
     if (frame.len > 8) frame.len = 8;
 
@@ -207,10 +203,10 @@ void CANScriptHelper::sendFrame(QJSValue bus, QJSValue id, QJSValue length, QJSV
 
     for (unsigned int i = 0; i < frame.len; i++)
     {
-        frame.data[i] = (uint8_t)data.property(i).toInt();
+        frame.data[i] = static_cast<quint8>(data.property(i).toUInt());
     }
 
-    frame.bus = (uint32_t)bus.toInt();
+    frame.bus = bus.toUInt();
     //if (frame.bus > 1) frame.bus = 1;
 
     if (frame.ID > 0x7FF) frame.extended = true;
@@ -271,14 +267,14 @@ void ISOTPScriptHelper::sendISOTP(QJSValue bus, QJSValue id, QJSValue length, QJ
 {
     ISOTP_MESSAGE msg;
     msg.extended = false;
-    msg.ID = id.toInt();
-    msg.len = length.toUInt();
+    msg.ID = id.toUInt();
+    msg.len = length.toInt();
 
     if (!data.isArray()) qDebug() << "data isn't an array";
 
-    for (int i = 0; i < msg.len; i++)
+    for (quint32 i = 0; i < static_cast<quint32>(msg.len); i++)
     {
-        msg.data[i] = static_cast<uint8_t>(data.property(i).toInt());
+        msg.data[i] = static_cast<quint8>(data.property(i).toUInt());
     }
 
     msg.bus = bus.toInt();
@@ -304,7 +300,8 @@ void ISOTPScriptHelper::newISOMessage(ISOTP_MESSAGE msg)
     args << msg.bus << msg.ID << msg.len;
     QJSValue dataBytes = scriptEngine->newArray(static_cast<uint>(msg.len));
 
-    for (unsigned int j = 0; j < msg.len; j++) dataBytes.setProperty(j, QJSValue(msg.data[j]));
+    for (quint32 j = 0; j < static_cast<quint32>(msg.len); j++)
+        dataBytes.setProperty(j, QJSValue(msg.data[j]));
     args.append(dataBytes);
     gotFrameFunction.call(args);
 }
@@ -350,13 +347,12 @@ void UDSScriptHelper::sendUDS(QJSValue bus, QJSValue id, QJSValue service, QJSVa
     if (!data.isArray()) qDebug() << "data isn't an array";
 
     msg.data.reserve(msg.len);
-
-    for (unsigned int i = 0; i < msg.len; i++)
+    for (quint32 i = 0; i < static_cast<quint32>(msg.len); i++)
     {
         msg.data.append(static_cast<uint8_t>(data.property(i).toInt()));
     }
 
-    msg.bus = (uint32_t)bus.toInt();
+    msg.bus = bus.toInt();
 
     if (msg.ID > 0x7FF) msg.extended = true;
 
@@ -379,9 +375,10 @@ void UDSScriptHelper::newUDSMessage(UDS_MESSAGE msg)
 
     QJSValueList args;
     args << msg.bus << msg.ID << msg.service << msg.subFunc << msg.len;
-    QJSValue dataBytes = scriptEngine->newArray(msg.len);
+    QJSValue dataBytes = scriptEngine->newArray(static_cast<uint>(msg.len));
 
-    for (unsigned int j = 0; j < msg.data.length(); j++) dataBytes.setProperty(j, QJSValue(msg.data[j]));
+    for (quint32 j = 0; j < static_cast<quint32>(msg.data.length()); j++)
+        dataBytes.setProperty(j, QJSValue(msg.data[j]));
     args.append(dataBytes);
     gotFrameFunction.call(args);
 }
