@@ -211,9 +211,9 @@ void ConnectionWindow::handleConnectionTypeChanged(const QString &type)
 
 
 /* status */
-void ConnectionWindow::connectionStatus(CANCon::status pStatus)
+void ConnectionWindow::handleConnectionStatusChanged(CANConnection::Status status)
 {
-    Q_UNUSED(pStatus);
+    Q_UNUSED(status);
 
     qDebug() << "Connectionstatus changed";
     connModel->refresh();
@@ -474,8 +474,8 @@ CANConnection *ConnectionWindow::create(const QString &typeName, const QString &
     if(conn_p)
     {
         /* connect signal */
-        connect(conn_p, SIGNAL(status(CANCon::status)),
-                this, SLOT(connectionStatus(CANCon::status)));
+        connect(conn_p, SIGNAL(status(CANCon::Status)),
+                this, SLOT(handleConnectionStatusChanged(CANCon::Status)));
 
         /*TODO add return value and checks */
         conn_p->start();

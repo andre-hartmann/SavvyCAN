@@ -6,7 +6,6 @@
 #include "utils/lfqueue.h"
 #include "can_structs.h"
 #include "canbus.h"
-#include "canconconst.h"
 
 struct BusData;
 
@@ -31,6 +30,14 @@ protected:
                   bool pUseThread);
 
 public:
+    /**
+     * @brief The status enum
+     */
+    enum Status
+    {
+        Disconnected,   /*!< device is disconnected */
+        Connected       /*!< device is connected */
+    };
 
     /**
      * @brief CANConnection destructor
@@ -66,7 +73,7 @@ public:
      * @brief getStatus
      * @return the @ref CANCon::status of the device (either connected or not)
      */
-    CANCon::status getStatus();
+    Status getStatus() const;
 
     static QString typeGvret();
     static QString typeKvaser();
@@ -91,7 +98,7 @@ signals:
      * @brief event emitted when the CANCon::status of the connection changes (connected->not_connected or the other way round)
      * @param pStatus: the new status of the device
      */
-    void status(CANCon::status pStatus);
+    void status(Status pStatus);
 
     /**
       * @brief Event sent when device has done something worthy of debugging output.
@@ -194,7 +201,7 @@ protected:
      * @brief setStatus
      * @param pStatus: the status to set
      */
-    void setStatus(CANCon::status pStatus);
+    void setStatus(Status status);
 
     /**
      * @brief isConfigured

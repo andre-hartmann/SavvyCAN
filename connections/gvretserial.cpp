@@ -273,7 +273,7 @@ void GVRetSerial::connectDevice()
         QTimer::singleShot(1000, this, SLOT(connectionTimeout()));
     }
     else {
-        setStatus(CANCon::CONNECTED);
+        setStatus(Connected);
         emit status(getStatus());
     }
 
@@ -555,7 +555,7 @@ void GVRetSerial::procRXChar(unsigned char c)
             if (can1ListenOnly) can1Baud |= 0x20000000;
             if (deviceSingleWireMode > 0) can1Baud |= 0x10000000;
 
-            setStatus(CANCon::CONNECTED);
+            setStatus(Connected);
             emit status(getStatus());
 
             int can0Status = 0x78; //updating everything we can update

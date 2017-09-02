@@ -121,7 +121,7 @@ void CANConManager::refreshConnection(CANConnection* pConn_p)
     unsigned int buses = 0;
     foreach(CANConnection* conn_p, mConns)
     {
-        if (conn_p->getStatus() == CANCon::CONNECTED) buses += conn_p->getNumBuses();
+        if (conn_p->getStatus() == CANConnection::Connected) buses += conn_p->getNumBuses();
     }
     if (buses != mNumActiveBuses)
     {

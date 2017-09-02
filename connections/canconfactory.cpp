@@ -3,8 +3,6 @@
 #include "serialbusconnection.h"
 #include "gvretserial.h"
 
-using namespace CANCon;
-
 CANConnection *CanConFactory::create(const QString &type, const QString &portName)
 {
     if (type == CANConnection::typeGvret())

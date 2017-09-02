@@ -20,14 +20,14 @@ CANConnection::CANConnection(const QString &pType,
     mPort(pPort),
     mType(pType),
     mIsCapSuspended(false),
-    mStatus(CANCon::NOT_CONNECTED),
+    mStatus(Disconnected),
     mStarted(false),
     mThread_p(NULL)
 {
     /* register types */
     qRegisterMetaType<CANBus>("CANBus");
     qRegisterMetaType<CANFrame>("CANFrame");
-    qRegisterMetaType<CANCon::status>("CANCon::status");
+    qRegisterMetaType<Status>("CANConnection::Status");
     qRegisterMetaType<CANFltObserver>("CANFlt");
 
     /* set queue size */
@@ -249,12 +249,12 @@ QString CANConnection::getType() const {
 }
 
 
-CANCon::status CANConnection::getStatus() {
-    return (CANCon::status) mStatus.load();
+CANConnection::Status CANConnection::getStatus() const {
+    return static_cast<Status>(mStatus.load());
 }
 
-void CANConnection::setStatus(CANCon::status pStatus) {
-    mStatus.store(pStatus);
+void CANConnection::setStatus(Status status) {
+    mStatus.store(status);
 }
 
 QString CANConnection::typeGvret()

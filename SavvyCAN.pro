@@ -86,7 +86,6 @@ HEADERS  += mainwindow.h \
     motorcontrollerconfigwindow.h \
     connections/canconnection.h \
     connections/serialbusconnection.h \
-    connections/canconconst.h \
     connections/canconfactory.h \
     connections/gvretserial.h \
     connections/canconmanager.h \

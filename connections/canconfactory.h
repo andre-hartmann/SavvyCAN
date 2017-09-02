@@ -1,7 +1,6 @@
 #ifndef CANCONFACTORY_H
 #define CANCONFACTORY_H
 
-#include "canconconst.h"
 #include "canconnection.h"
 
 class CanConFactory

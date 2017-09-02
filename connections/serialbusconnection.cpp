@@ -214,16 +214,16 @@ void SerialBusConnection::testConnection() {
 
     switch(getStatus())
     {
-        case CANCon::CONNECTED:
+        case CANConnection::Connected:
             if (!dev_p || !dev_p->connectDevice()) {
                 /* we have lost connectivity */
                 disconnectDevice();
 
-                setStatus(CANCon::NOT_CONNECTED);
+                setStatus(Disconnected);
                 emit status(getStatus());
             }
             break;
-        case CANCon::NOT_CONNECTED:
+        case CANConnection::Disconnected:
             if (dev_p && dev_p->connectDevice()) {
                 if(!mDev_p) {
                     /* try to reconnect */
@@ -234,7 +234,7 @@ void SerialBusConnection::testConnection() {
                 /* disconnect test instance */
                 dev_p->disconnectDevice();
 
-                setStatus(CANCon::CONNECTED);
+                setStatus(Connected);
                 emit status(getStatus());
             }
             break;

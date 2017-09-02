@@ -114,7 +114,7 @@ QVariant CANConnectionModel::data(const QModelIndex &index, int role) const
             case 5: //Single Wire
                 return (bus.singleWire) ? "True" : "False";
             case 6: //Status
-                return (conn_p->getStatus()==CANCon::CONNECTED) ? "Connected" : "Not Connected";
+                return (conn_p->getStatus() == CANConnection::Connected) ? "Connected" : "Disconnected";
             case 7: //Active
                 return (bus.active) ? "True" : "False";
             default: {}
