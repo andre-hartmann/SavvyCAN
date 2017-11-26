@@ -2,8 +2,8 @@
 #include <QThread>
 #include "canconnection.h"
 
-CANConnection::CANConnection(QString pPort,
-                             CANCon::type pType,
+CANConnection::CANConnection(const QString &pType,
+                             const QString &pPort,
                              int pNumBuses,
                              int pQueueLen,
                              bool pUseThread) :
@@ -233,7 +233,7 @@ LFQueue<CANFrame>& CANConnection::getQueue() {
 }
 
 
-CANCon::type CANConnection::getType() {
+QString CANConnection::getType() const {
     return mType;
 }
 
@@ -244,6 +244,21 @@ CANCon::status CANConnection::getStatus() {
 
 void CANConnection::setStatus(CANCon::status pStatus) {
     mStatus.store(pStatus);
+}
+
+QString CANConnection::typeGvret()
+{
+    return QStringLiteral("GVRET");
+}
+
+QString CANConnection::typeKvaser()
+{
+    return QStringLiteral("KVASER");
+}
+
+QString CANConnection::typeSocketCan()
+{
+    return QStringLiteral("socketcan");
 }
 
 bool CANConnection::isCapSuspended() {

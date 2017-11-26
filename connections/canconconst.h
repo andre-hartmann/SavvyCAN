@@ -11,14 +11,6 @@ namespace CANCon {
         NOT_CONNECTED,  /*!< device is not connected */
         CONNECTED       /*!< device is connected */
     };
-
-    enum type
-    {
-        GVRET_SERIAL,
-        KVASER,
-        SOCKETCAN,
-        NONE
-    };
 }
 
 class CANConStatus

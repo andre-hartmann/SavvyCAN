@@ -8,7 +8,7 @@
 #include "gvretserial.h"
 
 GVRetSerial::GVRetSerial(QString portName) :
-    CANConnection(portName, CANCon::GVRET_SERIAL, 3, 4000, true),
+    CANConnection(typeGvret(), portName, 3, 4000, true),
     mTimer(this) /*NB: set this as parent of timer to manage it from working thread */
 {
     qDebug() << "GVRetSerial()";

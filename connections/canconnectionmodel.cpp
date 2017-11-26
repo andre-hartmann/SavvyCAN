@@ -87,19 +87,19 @@ Qt::ItemFlags CANConnectionModel::flags(const QModelIndex &index) const
     CANConnection *conn_p = getAtIdx(index.row(), busId);
     if (!conn_p) return Qt::ItemFlag::NoItemFlags;
 
-    //you can't set speed, single wire, or listen only on socketcan devices so
-    //detect if we're using GVRET where you can and turn that functionality on
-    bool editParams = false;
-    if (conn_p->getType() == CANCon::GVRET_SERIAL) editParams = true;
+    // Currently, single wire and listen only can only be set for GVRET devices.
+    // But all QCanBus devices except SocketCAN allow setting the CAN bitrate.
+    bool canEditParams = conn_p->getType() == CANConnection::typeGvret();
+    bool canSetSpeed = conn_p->getType() != CANConnection::typeSocketCan();
 
     switch (Column(index.column()))
     {
     case Column::Speed:
-        if (editParams) return Qt::ItemFlag::ItemIsEditable | Qt::ItemFlag::ItemIsEnabled;
+        if (canSetSpeed) return Qt::ItemFlag::ItemIsEditable | Qt::ItemFlag::ItemIsEnabled;
         return Qt::ItemFlag::NoItemFlags;
     case Column::ListenOnly:
     case Column::SingleWire:
-        if (editParams) return Qt::ItemFlag::ItemIsEditable | Qt::ItemFlag::ItemIsEnabled | Qt::ItemFlag::ItemIsUserCheckable;
+        if (canEditParams) return Qt::ItemFlag::ItemIsEditable | Qt::ItemFlag::ItemIsEnabled | Qt::ItemFlag::ItemIsUserCheckable;
         return Qt::ItemFlag::NoItemFlags;
     case Column::Active:
         return Qt::ItemFlag::ItemIsEditable | Qt::ItemFlag::ItemIsEnabled | Qt::ItemFlag::ItemIsUserCheckable;
@@ -152,7 +152,7 @@ QVariant CANConnectionModel::data(const QModelIndex &index, int role) const
     bool ret;
     if (!conn_p) return QVariant();
     ret = conn_p->getBusSettings(busId, bus);
-    bool isSocketCAN = (conn_p->getType() == CANCon::SOCKETCAN) ? true: false;
+    bool isSocketCAN = conn_p->getType() == CANConnection::typeSocketCan();
 
     //qDebug() << "ConnP: " << conn_p << "  ret " << ret;
 
@@ -164,13 +164,7 @@ QVariant CANConnectionModel::data(const QModelIndex &index, int role) const
                 //return QString::number(busId);
                 return QString::number(index.row());
             case Column::Type:
-                if (conn_p)
-                    switch (conn_p->getType()) {
-                        case CANCon::KVASER: return "KVASER";
-                        case CANCon::SOCKETCAN: return "SocketCAN";
-                        case CANCon::GVRET_SERIAL: return "GVRET";
-                        default: {}
-                    }
+                if (conn_p) return conn_p->getType();
                 else qDebug() << "Tried to show connection type but connection was NULL";
                 break;
             case Column::Port:
